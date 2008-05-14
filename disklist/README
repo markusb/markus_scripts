@@ -1,0 +1,21 @@
+
+AIX virtual disk inventory
+
+These scripts analyze the disk configuration of IBM pSeries servers
+and display the disks/luns and their relation in a web page.
+
+There are two scripts:
+- disklist_getdata.pl
+  This script connects to the hosts/partitions HMC's and VIO's
+  and writes the data found into a sqlite database file.
+  It requires ssh access to all hosts involved.
+
+- disklist_cgi.pl
+  This cgi script analyzes the data found and display it on a series
+  of web pages.
+
+Prerequisites are perl (standard on AIX) and the DBI and DBD::Sqlite2
+cpan modules.
+
+(c) Markus Baertschi, markus@markus.org
+
