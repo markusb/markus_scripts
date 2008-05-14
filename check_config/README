@@ -1,0 +1,10 @@
+
+check_config.sh
+
+this script checks the configuration of tunables on an AIX
+server and warns if the tunables are not in line with desired
+values.
+If desired it can apply the desired values.
+
+(c) Markus Baertschi, markus@markus.org
+
