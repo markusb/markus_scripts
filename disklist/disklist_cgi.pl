@@ -11,7 +11,7 @@ use CGI qw/:standard/;
 use CGI::Carp qw(fatalsToBrowser);
  
 my $cgi = new CGI;
-my $dbfile = "/ibm/tmp/disklist.sqlite";
+my $dbfile = "/work/git/markus_scripts/disklist/disklist.sqlite";
 my $dbh;
 my $partid;
 my $host="";
