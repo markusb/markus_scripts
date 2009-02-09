@@ -1,0 +1,47 @@
+#
+# kshrc for VIO server
+#
+
+#
+# Set up commandline editing using the cursor keys
+#
+set -o emacs
+alias __A=$(echo "\020") # Up    ^P (Previous)
+alias __B=$(echo "\016") # Down  ^N (Next)
+alias __C=$(echo "\006") # Right ^F (Forward)
+alias __D=$(echo "\002") # Left  ^B (Backward)
+
+#
+# A Prompt showing the user
+#
+ID=$(/usr/bin/id -un)
+if [ "$ID" = "root" ]
+then
+  PCHAR="#"
+  export PATH=$PATH:/usr/ios/cli
+else
+  PCHAR=">"
+fi
+HN=$(/usr/bin/hostname)
+PS1="[$ID@$HN]"'$PWD $PCHAR '
+#
+# If we are on an xterm the set the title-bar
+#
+case $TERM in
+  xterm)
+    export PS1="$(print '\033]0;')[$ID@$HN]\:"'${PWD}'"$(print '\007\r')[$ID@$HN] $PCHAR "
+  ;;
+esac
+
+#
+# Define a separate history file per user (root and padmin)
+#
+HISTFILE=$HOME/.sh_history.$ID
+HISTSIZE=10000
+
+#
+# aliases
+#
+alias ll="ls -al"
+alias lsemc="/usr/sbin/powermt display dev=all | grep -e 'Pseudo|Logical'"
+

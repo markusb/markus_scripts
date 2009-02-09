@@ -1,0 +1,72 @@
+#
+# kshrc
+#
+# MABA, 21.02.2007
+#
+
+#
+# Enable command-line editing using the cursor keys
+#
+set -o emacs
+alias __A=$(echo "\020") # Up    ^P (Previous)
+alias __B=$(echo "\016") # Down  ^N (Next)
+alias __C=$(echo "\006") # Right ^F (Forward)
+alias __D=$(echo "\002") # Left  ^B (Backward)
+
+#
+# Display a meaningful prompt
+# - On an xterm, display the user, host and working directory in the title bar
+# - On others display it in the prompt
+#
+if [ "$USER" = "root" ]
+then
+  PCHAR="#"
+else
+  PCHAR=">"
+fi
+
+HN=$(/usr/bin/hostname)
+PS1="[$USER@$HN]"'$PWD $PCHAR '
+case $TERM in
+  xterm)
+    export PS1="$(print '\033]0;')[$USER@$HN]\:"'${PWD}'"$(print '\007\r')[$USER@$HN] $PCHAR "
+  ;;
+esac
+
+if tty -s
+then
+  #
+  # Figure out a sensible way to treat the shell history
+  # - if the user became root with 'su' get the name form 'who'
+  # - if the user logged in directly get the host from 'who'
+  # - add the current date
+  # -> We get a single history per date and user
+  TTY=$(tty)
+  REALUSER=$(who | awk "/pts\/${TTY##*\/}/"'{print $1}')
+  if [ "$REALUSER" = "root" ]
+  then
+    REALUSER=$(who | awk -F'[()]' "/pts\/${TTY##*\/}/"'{print $2}')
+  fi
+  DATESTAMP=$(date +%Y%m%d)
+  HISTDIR=$HOME/.sh_history_dir
+  if [ ! -d $HISTDIR ]; then mkdir $HISTDIR; fi
+  HISTFILE="$HISTDIR/${DATESTAMP}_${REALUSER}"
+  HISTSIZE=10000
+  export HISTSIZE HISTFILE
+fi
+
+#
+# Some aliases
+#
+alias ll="ls -al"
+
+
+#
+# If the user has a personal kshrc then execute it
+#
+if [ -x $HOME/.kshrc ]
+then
+  . $HOME/.kshrc
+fi
+
+
